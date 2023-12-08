@@ -50,7 +50,7 @@ def test_get_invalid_email_status() -> None:
         )
 
         client = HunterClient(api_key='not_really_an_api_key')
-        email_is_valid = client.get_email_status('test@nonexistent.com')
+        email_is_valid = client.check_if_email_is_valid('test@nonexistent.com')
 
         assert email_is_valid is False
 

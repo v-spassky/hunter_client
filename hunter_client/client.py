@@ -86,7 +86,7 @@ class HunterClient(object):
             self._dispatch_client_exception(resp)
         return resp.json()['data']['email']
 
-    def get_email_status(self, email: str) -> bool:
+    def check_if_email_is_valid(self, email: str) -> bool:
         """
         Verify the status of an email address.
 

@@ -53,7 +53,7 @@ def test_get_email_status() -> None:
         )
 
         client = HunterClient(api_key='not_really_an_api_key')
-        status = client.get_email_status('test@example.com')
+        status = client.check_if_email_is_valid('test@example.com')
 
         assert status is True
 
