@@ -6,7 +6,7 @@ from hunter_client.client import HunterClient
 def test_search_emails_by_domain() -> None:
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            'https://api.hunter.io/v2/domain-search?domain=example.com&api_key=not_really_an_api_key',
+            'https://api.hunter.io/v2/domain-search?domain=example.com',
             json={
                 'data': {
                     'emails': [
@@ -26,8 +26,7 @@ def test_search_emails_by_domain() -> None:
 def test_search_email_by_domain_and_name() -> None:
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            'https://api.hunter.io/v2/email-finder?domain=example.com&first_name=John&last_name=Doe'
-            + '&api_key=not_really_an_api_key',
+            'https://api.hunter.io/v2/email-finder?domain=example.com&first_name=John&last_name=Doe',
             json={
                 'data': {
                     'email': 'john.doe@example.com',
@@ -44,7 +43,7 @@ def test_search_email_by_domain_and_name() -> None:
 def test_get_email_status() -> None:
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            'https://api.hunter.io/v2/email-verifier?email=test@example.com&api_key=not_really_an_api_key',
+            'https://api.hunter.io/v2/email-verifier?email=test@example.com',
             json={
                 'data': {
                     'status': 'valid',
@@ -61,7 +60,7 @@ def test_get_email_status() -> None:
 def test_count_emails_of_domain() -> None:
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            'https://api.hunter.io/v2/email-count?email=example.com',
+            'https://api.hunter.io/v2/email-count?domain=example.com',
             json={
                 'data': {
                     'total': 5,

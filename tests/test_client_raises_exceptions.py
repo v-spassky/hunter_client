@@ -9,7 +9,7 @@ from hunter_client.exceptions import HunterError, HunterServerError, InvalidInpu
 def test_dispatch_invalid_input_exception() -> None:
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            'https://api.hunter.io/v2/domain-search?domain=invalid_domain&api_key=not_really_an_api_key',
+            'https://api.hunter.io/v2/domain-search?domain=invalid_domain',
             status_code=requests.codes.bad_request,
         )
 
@@ -21,7 +21,7 @@ def test_dispatch_invalid_input_exception() -> None:
 def test_dispatch_too_many_requests_exception() -> None:
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            'https://api.hunter.io/v2/domain-search?domain=example.com&api_key=not_really_an_api_key',
+            'https://api.hunter.io/v2/domain-search?domain=example.com',
             status_code=requests.codes.too_many_requests,
         )
 
@@ -33,7 +33,7 @@ def test_dispatch_too_many_requests_exception() -> None:
 def test_dispatch_server_error_exception() -> None:
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            'https://api.hunter.io/v2/domain-search?domain=example.com&api_key=not_really_an_api_key',
+            'https://api.hunter.io/v2/domain-search?domain=example.com',
             status_code=requests.codes.internal_server_error,
         )
 
@@ -45,7 +45,7 @@ def test_dispatch_server_error_exception() -> None:
 def test_dispatch_generic_client_error_exception() -> None:
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            'https://api.hunter.io/v2/domain-search?domain=example.com&api_key=not_really_an_api_key',
+            'https://api.hunter.io/v2/domain-search?domain=example.com',
             status_code=requests.codes.im_a_teapot,
         )
 

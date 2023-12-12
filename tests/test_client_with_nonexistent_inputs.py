@@ -6,7 +6,7 @@ from hunter_client.client import HunterClient
 def test_search_emails_by_domain_no_result() -> None:
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            'https://api.hunter.io/v2/domain-search?domain=nonexistent.com&api_key=not_really_an_api_key',
+            'https://api.hunter.io/v2/domain-search?domain=nonexistent.com',
             json={
                 'data': {
                     'emails': [],
@@ -23,8 +23,7 @@ def test_search_emails_by_domain_no_result() -> None:
 def test_search_email_by_random_domain_and_name() -> None:
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            'https://api.hunter.io/v2/email-finder?domain=nonexistent.com&first_name=John&last_name=Doe'
-            + '&api_key=not_really_an_api_key',
+            'https://api.hunter.io/v2/email-finder?domain=nonexistent.com&first_name=John&last_name=Doe',
             json={
                 'data': {
                     'email': None,
@@ -41,7 +40,7 @@ def test_search_email_by_random_domain_and_name() -> None:
 def test_get_invalid_email_status() -> None:
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            'https://api.hunter.io/v2/email-verifier?email=test@nonexistent.com&api_key=not_really_an_api_key',
+            'https://api.hunter.io/v2/email-verifier?email=test@nonexistent.com',
             json={
                 'data': {
                     'status': 'accept_all',
@@ -58,7 +57,7 @@ def test_get_invalid_email_status() -> None:
 def test_count_emails_of_noneistent_domain() -> None:
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            'https://api.hunter.io/v2/email-count?email=nonexistent.com',
+            'https://api.hunter.io/v2/email-count?domain=nonexistent.com',
             json={
                 'data': {
                     'total': 0,
