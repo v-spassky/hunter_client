@@ -3,6 +3,7 @@
 import requests
 
 from hunter_client.endpoint_handlers.base import AbstractBaseEndpointHandler
+from hunter_client.endpoint_handlers.response_models import DomainSearcherResponse
 
 
 class DomainSearcher(AbstractBaseEndpointHandler):
@@ -24,4 +25,4 @@ class DomainSearcher(AbstractBaseEndpointHandler):
         response = self._http_session.get(target_url)
         if response.status_code != requests.codes.ok:
             self._dispatch_client_exception(response)
-        return [email['value'] for email in response.json()['data']['emails']]
+        return DomainSearcherResponse.model_validate(response.json()['data']).bare_emails

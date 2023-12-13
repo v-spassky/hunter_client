@@ -3,6 +3,7 @@
 import requests
 
 from hunter_client.endpoint_handlers.base import AbstractBaseEndpointHandler
+from hunter_client.endpoint_handlers.response_models import EmailVerifierResponse
 
 
 class EmailVerifier(AbstractBaseEndpointHandler):
@@ -24,4 +25,4 @@ class EmailVerifier(AbstractBaseEndpointHandler):
         response = self._http_session.get(target_url)
         if response.status_code != requests.codes.ok:
             self._dispatch_client_exception(response)
-        return response.json()['data']['status'] == 'valid'
+        return EmailVerifierResponse.model_validate(response.json()['data']).is_valid
