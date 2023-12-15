@@ -40,6 +40,7 @@ class HunterClient(object):
         self,
         api_key: str,
         request_timeout: int | None = None,
+        http_session: requests.Session | None = None,
     ) -> None:
         """
         Initialize a new instance of the HunterClient class.
@@ -50,7 +51,7 @@ class HunterClient(object):
         """
         self._api_key = api_key
         self._request_timeout = request_timeout or self._default_request_timeout
-        self._http_session = requests.Session()
+        self._http_session = http_session or requests.Session()
         self._http_session.headers.update({'X-API-KEY': self._api_key})
 
     def search_emails_by_domain(self, target_domain: str) -> list[str]:
