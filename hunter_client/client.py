@@ -23,12 +23,10 @@ class HunterClient(object):
     """
 
     _hunter_domain = 'https://api.hunter.io/v2'
-    _default_request_timeout = 5
 
     def __init__(
         self,
         api_key: str,
-        request_timeout: int | None = None,
         http_session: requests.Session | None = None,
     ) -> None:
         """
@@ -36,10 +34,9 @@ class HunterClient(object):
 
         Args:
             api_key (str): The API key for accessing the Hunter.io API.
-            request_timeout (int | None, optional): The timeout in seconds for API requests, defaults to None.
+            http_session (requests.Session | None): The HTTP session to use for making requests.
         """
         self._api_key = api_key
-        self._request_timeout = request_timeout or self._default_request_timeout
         self._http_session = http_session or requests.Session()
         self._http_session.headers.update({'X-API-KEY': self._api_key})
 
