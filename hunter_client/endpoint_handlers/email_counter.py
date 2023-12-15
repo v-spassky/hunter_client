@@ -1,7 +1,5 @@
 """This module contains handler class implementation for the `email-count` endpoint of the Hunter API."""
 
-import requests
-
 from hunter_client.endpoint_handlers.base import AbstractBaseEndpointHandler
 from hunter_client.endpoint_handlers.response_models import EmailCounterResponse
 
@@ -22,6 +20,4 @@ class EmailCounter(AbstractBaseEndpointHandler):
             int: The total number of emails found for the given domain.
         """
         response = self.make_request('GET', domain=target_domain)
-        if response.status_code != requests.codes.ok:
-            self._dispatch_client_exception(response)
         return EmailCounterResponse.model_validate(response.json()['data']).total

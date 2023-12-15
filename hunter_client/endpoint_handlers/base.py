@@ -8,12 +8,10 @@ to various API endpoints and manages common tasks like error handling, session m
 
 import logging
 from abc import ABC, abstractmethod
-from typing import NoReturn, NotRequired, TypedDict, Unpack
+from typing import NotRequired, TypedDict, Unpack
 from urllib.parse import urlencode, urljoin
 
 import requests
-
-from hunter_client.exceptions import HunterError, HunterServerError, InvalidInputError, TooManyRequestsError
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +68,7 @@ class AbstractBaseEndpointHandler(ABC):
         self.before_request(method, url, **query_params)
         response = self._http_session.request(method, url)
         self.after_request(response)
+        response.raise_for_status()
         return response
 
     @property
@@ -100,23 +99,3 @@ class AbstractBaseEndpointHandler(ABC):
         """
         joined_url = urljoin(self._hunter_api_base_url, self._current_api_version_path + self._endpoint_url_path)
         return '{0}?{1}'.format(joined_url, urlencode(query_params))
-
-    @classmethod
-    def _dispatch_client_exception(cls, response: requests.Response) -> NoReturn:
-        """
-        Raise an appropriate exception based on the response status code.
-
-        Args:
-            response (requests.Response): The response to check.
-        """
-        exception: HunterError
-        match response.status_code:
-            case requests.codes.bad_request:
-                exception = InvalidInputError()
-            case requests.codes.too_many_requests:
-                exception = TooManyRequestsError()
-            case requests.codes.internal_server_error:
-                exception = HunterServerError()
-            case _:
-                exception = HunterError()
-        raise exception
