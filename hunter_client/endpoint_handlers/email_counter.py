@@ -21,8 +21,7 @@ class EmailCounter(AbstractBaseEndpointHandler):
         Returns:
             int: The total number of emails found for the given domain.
         """
-        target_url = self._formatted_url(domain=target_domain)
-        response = self._http_session.get(target_url)
+        response = self.make_request('GET', domain=target_domain)
         if response.status_code != requests.codes.ok:
             self._dispatch_client_exception(response)
         return EmailCounterResponse.model_validate(response.json()['data']).total

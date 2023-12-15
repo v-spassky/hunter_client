@@ -6,7 +6,7 @@ for interacting with the Hunter API. The module ensures a consistent approach fo
 to various API endpoints and manages common tasks like error handling, session management, and URL construction.
 """
 
-
+import logging
 from abc import ABC, abstractmethod
 from typing import NoReturn, NotRequired, TypedDict, Unpack
 from urllib.parse import urlencode, urljoin
@@ -14,6 +14,8 @@ from urllib.parse import urlencode, urljoin
 import requests
 
 from hunter_client.exceptions import HunterError, HunterServerError, InvalidInputError, TooManyRequestsError
+
+logger = logging.getLogger(__name__)
 
 
 class PossibleQueryParams(TypedDict):
@@ -53,6 +55,22 @@ class AbstractBaseEndpointHandler(ABC):
             http_session (requests.Session): A session object used for making HTTP requests.
         """
         self._http_session = http_session
+
+    def before_request(self, method: str, url: str, **_query_params: Unpack[PossibleQueryParams]) -> None:
+        """Request lifecycle hook before making an HTTP request."""
+        logger.debug('Going to make an HTTP request: {0} {1}'.format(method, url))
+
+    def after_request(self, response: requests.Response) -> None:
+        """Request lifecycle hook after making an HTTP request."""
+        logger.debug('Got HTTP response: {0} {1}'.format(response.status_code, response.url))
+
+    def make_request(self, method: str, **query_params: Unpack[PossibleQueryParams]) -> requests.Response:
+        """Central method to make HTTP requests."""
+        url = self._formatted_url(**query_params)
+        self.before_request(method, url, **query_params)
+        response = self._http_session.request(method, url)
+        self.after_request(response)
+        return response
 
     @property
     @abstractmethod

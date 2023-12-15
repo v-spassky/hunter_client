@@ -21,8 +21,7 @@ class EmailVerifier(AbstractBaseEndpointHandler):
         Returns:
             bool: True if the email is valid, False otherwise.
         """
-        target_url = self._formatted_url(email=email)
-        response = self._http_session.get(target_url)
+        response = self.make_request('GET', email=email)
         if response.status_code != requests.codes.ok:
             self._dispatch_client_exception(response)
         return EmailVerifierResponse.model_validate(response.json()['data']).is_valid

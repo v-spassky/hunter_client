@@ -7,7 +7,7 @@ from hunter_client.services.email_validation import PersistentEmailValidationSer
 from hunter_client.storages.dummy import DummyStorage
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 emails_storage = DummyStorage[str, bool]()
 email_validation_service = PersistentEmailValidationService('qwerty12345', emails_storage)

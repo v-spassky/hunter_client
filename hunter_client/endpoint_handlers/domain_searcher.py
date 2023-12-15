@@ -21,8 +21,7 @@ class DomainSearcher(AbstractBaseEndpointHandler):
         Returns:
             list[str]: A list of email addresses found under the specified domain.
         """
-        target_url = self._formatted_url(domain=target_domain)
-        response = self._http_session.get(target_url)
+        response = self.make_request('GET', domain=target_domain)
         if response.status_code != requests.codes.ok:
             self._dispatch_client_exception(response)
         return DomainSearcherResponse.model_validate(response.json()['data']).bare_emails

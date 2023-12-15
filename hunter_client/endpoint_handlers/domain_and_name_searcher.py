@@ -21,8 +21,7 @@ class DomainAndNameSearcher(AbstractBaseEndpointHandler):
         Returns:
             list[str]: A list of email addresses found under the specified domain.
         """
-        target_url = self._formatted_url(domain=target_domain, first_name=first_name, last_name=last_name)
-        response = self._http_session.get(target_url)
+        response = self.make_request('GET', domain=target_domain, first_name=first_name, last_name=last_name)
         if response.status_code != requests.codes.ok:
             self._dispatch_client_exception(response)
         return DomainAndNameSearcherResponse.model_validate(response.json()['data']).email
