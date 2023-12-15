@@ -4,17 +4,6 @@ This module provides a client for interacting with the Hunter API.
 The HunterClient class defined in this module allows users to perform various actions related to email hunting,
 such as searching for emails by domain, finding specific emails using a person's name and domain, verifying the
 status of an email address, and counting the number of emails associated with a particular domain.
-
-The client requires an API key for the Hunter service and offers the option to set a custom timeout for requests.
-Each method in the HunterClient class makes a specific request to the Hunter API and handles the response
-accordingly, providing a user-friendly interface for interacting with the Hunter API.
-
-Classes:
-    HunterClient: A client for interacting with the Hunter API.
-
-Usage:
-    To use the HunterClient, instantiate it with your Hunter API key and optionally specify a request timeout.
-    Then, call its methods with the appropriate parameters to perform email searches, verifications, and counts.
 """
 
 import requests
