@@ -1,8 +1,8 @@
-"""This module defines models that represent response body structures returned by the Hunter API."""
+"""This module defines models that represent the `data` part of the response bodies returned by the Hunter API."""
 
 from pydantic import BaseModel, EmailStr, HttpUrl
 
-from hunter_client.endpoint_handlers.response_models_components import (
+from hunter_client.endpoint_handlers.response_models.components import (
     EmailCountsPerDepartmentData,
     EmailCountsPerSeniorityLevelData,
     EmailInfo,
@@ -11,8 +11,8 @@ from hunter_client.endpoint_handlers.response_models_components import (
 )
 
 
-class DomainSearcherResponse(BaseModel):
-    """Represents the response from a `/domain-search` Hunter API endpoint."""
+class DomainSearcherResponseData(BaseModel):
+    """Represents the `data` part of a response from a `/domain-search` Hunter API endpoint."""
 
     domain: str
     disposable: bool | None
@@ -36,18 +36,9 @@ class DomainSearcherResponse(BaseModel):
     emails: list[EmailInfo]
     linked_domains: list[str]
 
-    @property
-    def bare_emails(self) -> list[str]:
-        """
-        Extract just the email addresses from the detailed email information.
 
-        Returns a list of email addresses as strings.
-        """
-        return [email.value for email in self.emails]
-
-
-class DomainAndNameSearcherResponse(BaseModel):
-    """Represents the response from the `/email-finder` Hunter API endpoint."""
+class DomainAndNameSearcherResponseData(BaseModel):
+    """Represents the `data` part of a response from the `/email-finder` Hunter API endpoint."""
 
     first_name: str | None
     last_name: str | None
@@ -64,11 +55,11 @@ class DomainAndNameSearcherResponse(BaseModel):
     verification: EmailVerificationInfo
 
 
-class EmailVerifierResponse(BaseModel):
-    """Represents the response from the `/email-verifier` Hunter API endpoint."""
+class EmailVerifierResponseData(BaseModel):
+    """Represents the `data` part of a response from the `/email-verifier` Hunter API endpoint."""
 
     status: str
-    result: str | None  # noqa: WPS110
+    result: str  # noqa: WPS110
     score: int | None
     email: EmailStr
     regexp: bool | None
@@ -82,14 +73,9 @@ class EmailVerifierResponse(BaseModel):
     block: bool | None
     sources: list[InformationSource]
 
-    @property
-    def is_valid(self) -> bool:
-        """Check if an email is considered valid according to the Hunter API response."""
-        return self.status == 'valid'
 
-
-class EmailCounterResponse(BaseModel):
-    """Represents the response from the `/email-count` Hunter API endpoint."""
+class EmailCounterResponseData(BaseModel):
+    """Represents the `data` part of a response from the `/email-count` Hunter API endpoint."""
 
     total: int
     personal_emails: int

@@ -1,6 +1,7 @@
 """This module contains handler class implementation for the `email-verifier` endpoint of the Hunter API."""
 
 from hunter_client.endpoint_handlers.base import AbstractBaseEndpointHandler
+from hunter_client.endpoint_handlers.mappers import EmailMapper
 from hunter_client.endpoint_handlers.response_models import EmailVerifierResponse
 
 
@@ -20,4 +21,6 @@ class EmailVerifier(AbstractBaseEndpointHandler):
             bool: True if the email is valid, False otherwise.
         """
         response = self.make_request('GET', email=email)
-        return EmailVerifierResponse.model_validate(response.json()['data']).is_valid
+        response_body = EmailVerifierResponse.model_validate(response.json())
+        email_model = EmailMapper.from_email_verifier_response(response_body)
+        return email_model.is_valid

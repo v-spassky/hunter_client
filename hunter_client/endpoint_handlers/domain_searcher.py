@@ -1,6 +1,8 @@
 """This module contains handler class implementation for the `domain-search` endpoint of the Hunter API."""
 
 from hunter_client.endpoint_handlers.base import AbstractBaseEndpointHandler
+from hunter_client.endpoint_handlers.mappers import DomainMapper
+from hunter_client.endpoint_handlers.presenters import DomainPresenter
 from hunter_client.endpoint_handlers.response_models import DomainSearcherResponse
 
 
@@ -20,4 +22,6 @@ class DomainSearcher(AbstractBaseEndpointHandler):
             list[str]: A list of email addresses found under the specified domain.
         """
         response = self.make_request('GET', domain=target_domain)
-        return DomainSearcherResponse.model_validate(response.json()['data']).bare_emails
+        response_body = DomainSearcherResponse.model_validate(response.json())
+        domain = DomainMapper.from_domain_searcher_response(response_body)
+        return DomainPresenter(domain).bare_email_addresses()
