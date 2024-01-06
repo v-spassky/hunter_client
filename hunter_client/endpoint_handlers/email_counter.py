@@ -6,7 +6,11 @@ from hunter_client.endpoint_handlers.response_models import EmailCounterResponse
 
 
 class EmailCounter(AbstractBaseEndpointHandler):
-    """Handler for the `email-count` endpoint in the Hunter API."""
+    """
+    Handler for the `email-count` endpoint in the Hunter API.
+
+    Wraps this endpoint: https://hunter.io/api-documentation/v2#email-count.
+    """
 
     _endpoint_url_path = '/email-count'
 

@@ -7,7 +7,11 @@ from hunter_client.endpoint_handlers.response_models import DomainSearcherRespon
 
 
 class DomainSearcher(AbstractBaseEndpointHandler):
-    """Handler for the `domain-search` endpoint in the Hunter API."""
+    """
+    Handler for the `domain-search` endpoint in the Hunter API.
+
+    Wraps this endpoint: https://hunter.io/api-documentation/v2#domain-search.
+    """
 
     _endpoint_url_path = '/domain-search'
 

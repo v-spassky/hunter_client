@@ -6,7 +6,11 @@ from hunter_client.endpoint_handlers.response_models import EmailVerifierRespons
 
 
 class EmailVerifier(AbstractBaseEndpointHandler):
-    """Handler for the `email-verifier` endpoint in the Hunter API."""
+    """
+    Handler for the `email-verifier` endpoint in the Hunter API.
+
+    Wraps this endpoint: https://hunter.io/api-documentation/v2#email-verifier.
+    """
 
     _endpoint_url_path = '/email-verifier'
 
