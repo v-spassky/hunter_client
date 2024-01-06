@@ -39,63 +39,7 @@ class HunterClient(object):
         self._api_key = api_key
         self._http_session = http_session or requests.Session()
         self._http_session.headers.update({'X-API-KEY': self._api_key})
-
-    def search_emails_by_domain(self, target_domain: str) -> list[str]:
-        """
-        Search for emails associated with a given domain.
-
-        Delegates the search for emails associated with a given domain to the `DomainSearcher`.
-
-        Args:
-            target_domain (str): The domain to search emails for.
-
-        Returns:
-            list[str]: A list of email addresses found under the specified domain.
-        """
-        return DomainSearcher(http_session=self._http_session).search_emails_by_domain(target_domain)
-
-    def search_email_by_domain_and_name(self, target_domain: str, first_name: str, last_name: str) -> str | None:
-        """
-        Search for a specific email by domain and the person's name.
-
-        Delegates the search for a specific email by domain and the person's name to the `DomainAndNameSearcher`.
-
-        Args:
-            target_domain (str): The domain to search the email in.
-            first_name (str): The first name of the person.
-            last_name (str): The last name of the person.
-
-        Returns:
-            str | None: The email address if found, otherwise None.
-        """
-        return DomainAndNameSearcher(http_session=self._http_session).search_email_by_domain_and_name(
-            target_domain, first_name, last_name,
-        )
-
-    def check_if_email_is_valid(self, email: str) -> bool:
-        """
-        Verify the status of an email address.
-
-        Delegates the verification of an email address to the `EmailVerifier`.
-
-        Args:
-            email (str): The email address to verify.
-
-        Returns:
-            bool: True if the email is valid, False otherwise.
-        """
-        return EmailVerifier(http_session=self._http_session).check_if_email_is_valid(email)
-
-    def count_emails_by_domain(self, target_domain: str) -> int:
-        """
-        Count the number of emails associated with a given domain.
-
-        Delegates the counting of emails associated with a given domain to the `EmailCounter`.
-
-        Args:
-            target_domain (str): The domain to count emails for.
-
-        Returns:
-            int: The total number of emails found for the given domain.
-        """
-        return EmailCounter(http_session=self._http_session).count_emails_by_domain(target_domain)
+        self.domain_searcher = DomainSearcher(http_session=self._http_session)
+        self.domain_and_name_searcher = DomainAndNameSearcher(http_session=self._http_session)
+        self.email_verifier = EmailVerifier(http_session=self._http_session)
+        self.email_counter = EmailCounter(http_session=self._http_session)

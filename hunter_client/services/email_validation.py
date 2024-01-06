@@ -34,6 +34,6 @@ class PersistentEmailValidationService(object):
         Returns:
             bool: Whether the email address is valid or not.
         """
-        email_is_valid = self._hunter_client.check_if_email_is_valid(email)
+        email_is_valid = self._hunter_client.email_verifier.check_if_email_is_valid(email)
         self._results_storage.set(email, email_is_valid)
         return email_is_valid

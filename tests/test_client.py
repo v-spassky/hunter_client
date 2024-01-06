@@ -13,7 +13,7 @@ def test_search_emails_by_domain(
         json=doamin_search_successful_response,
     )
 
-    emails = hunter_client.search_emails_by_domain('example.com')
+    emails = hunter_client.domain_searcher.search_emails_by_domain('example.com')
 
     assert emails == ['contact@example.com', 'info@example.com']
 
@@ -28,7 +28,7 @@ def test_search_email_by_domain_and_name(
         json=domain_and_name_search_successful_response,
     )
 
-    email = hunter_client.search_email_by_domain_and_name('example.com', 'John', 'Doe')
+    email = hunter_client.domain_and_name_searcher.search_email_by_domain_and_name('example.com', 'John', 'Doe')
 
     assert email == 'john.doe@example.com'
 
@@ -43,7 +43,7 @@ def test_get_email_status(
         json=email_verification_successful_response,
     )
 
-    status = hunter_client.check_if_email_is_valid('test@example.com')
+    status = hunter_client.email_verifier.check_if_email_is_valid('test@example.com')
 
     assert status is True
 
@@ -58,6 +58,6 @@ def test_count_emails_of_a_domain(
         json=email_count_successful_response,
     )
 
-    count = hunter_client.count_emails_by_domain('example.com')
+    count = hunter_client.email_counter.count_emails_by_domain('example.com')
 
     assert count == 81  # noqa: WPS432
