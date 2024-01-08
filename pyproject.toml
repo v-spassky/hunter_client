@@ -9,6 +9,7 @@ packages = [{include = "hunter_client"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 requests = "^2.31.0"
+pydantic = {version = "^2.5.2", extras = ["email"]}
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.1.0"

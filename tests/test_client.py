@@ -3,73 +3,61 @@ import requests_mock
 from hunter_client.client import HunterClient
 
 
-def test_search_emails_by_domain() -> None:
-    with requests_mock.Mocker() as mocker:
-        mocker.get(
-            'https://api.hunter.io/v2/domain-search?domain=example.com&api_key=not_really_an_api_key',
-            json={
-                'data': {
-                    'emails': [
-                        {'value': 'contact@example.com'},
-                        {'value': 'info@example.com'},
-                    ],
-                },
-            },
-        )
+def test_search_emails_by_domain(
+    hunter_client: HunterClient,
+    requests_mocker: requests_mock.Mocker,
+    domain_search_successful_response: dict,
+) -> None:
+    requests_mocker.get(
+        'https://api.hunter.io/v2/domain-search?domain=example.com',
+        json=domain_search_successful_response,
+    )
 
-        client = HunterClient(api_key='not_really_an_api_key')
-        emails = client.search_emails_by_domain('example.com')
+    response = hunter_client.domain_searcher.search_emails_by_domain('example.com')
 
-        assert emails == ['contact@example.com', 'info@example.com']
+    assert response == domain_search_successful_response
 
 
-def test_search_email_by_domain_and_name() -> None:
-    with requests_mock.Mocker() as mocker:
-        mocker.get(
-            'https://api.hunter.io/v2/email-finder?domain=example.com&first_name=John&last_name=Doe'
-            + '&api_key=not_really_an_api_key',
-            json={
-                'data': {
-                    'email': 'john.doe@example.com',
-                },
-            },
-        )
+def test_search_email_by_domain_and_name(
+    hunter_client: HunterClient,
+    requests_mocker: requests_mock.Mocker,
+    domain_and_name_search_successful_response: dict,
+) -> None:
+    requests_mocker.get(
+        'https://api.hunter.io/v2/email-finder?domain=example.com&first_name=John&last_name=Doe',
+        json=domain_and_name_search_successful_response,
+    )
 
-        client = HunterClient(api_key='not_really_an_api_key')
-        email = client.search_email_by_domain_and_name('example.com', 'John', 'Doe')
+    response = hunter_client.domain_and_name_searcher.search_email_by_domain_and_name('example.com', 'John', 'Doe')
 
-        assert email == 'john.doe@example.com'
+    assert response == domain_and_name_search_successful_response
 
 
-def test_get_email_status() -> None:
-    with requests_mock.Mocker() as mocker:
-        mocker.get(
-            'https://api.hunter.io/v2/email-verifier?email=test@example.com&api_key=not_really_an_api_key',
-            json={
-                'data': {
-                    'status': 'valid',
-                },
-            },
-        )
+def test_get_email_status(
+    hunter_client: HunterClient,
+    requests_mocker: requests_mock.Mocker,
+    email_verification_successful_response: dict,
+) -> None:
+    requests_mocker.get(
+        'https://api.hunter.io/v2/email-verifier?email=test@example.com',
+        json=email_verification_successful_response,
+    )
 
-        client = HunterClient(api_key='not_really_an_api_key')
-        status = client.check_if_email_is_valid('test@example.com')
+    response = hunter_client.email_verifier.check_if_email_is_valid('test@example.com')
 
-        assert status is True
+    assert response == email_verification_successful_response
 
 
-def test_count_emails_of_domain() -> None:
-    with requests_mock.Mocker() as mocker:
-        mocker.get(
-            'https://api.hunter.io/v2/email-count?email=example.com',
-            json={
-                'data': {
-                    'total': 5,
-                },
-            },
-        )
+def test_count_emails_of_a_domain(
+    hunter_client: HunterClient,
+    requests_mocker: requests_mock.Mocker,
+    email_count_successful_response: dict,
+) -> None:
+    requests_mocker.get(
+        'https://api.hunter.io/v2/email-count?domain=example.com',
+        json=email_count_successful_response,
+    )
 
-        client = HunterClient(api_key='not_really_an_api_key')
-        count = client.count_emails_by_domain('example.com')
+    response = hunter_client.email_counter.count_emails_by_domain('example.com')
 
-        assert count == 5
+    assert response == email_count_successful_response
