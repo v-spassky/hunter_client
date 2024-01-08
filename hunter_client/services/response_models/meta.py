@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel
 
-from hunter_client.endpoint_handlers.response_models.meta_params import (
+from hunter_client.services.response_models.meta_params import (
     DomainAndNameSearcherResponseMetaInfoParams,
     DomainSearcherResponseMetaInfoParams,
     EmailCounterResponseMetaInfoParams,

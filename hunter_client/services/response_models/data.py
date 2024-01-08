@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel, EmailStr, HttpUrl
 
-from hunter_client.endpoint_handlers.response_models.components import (
+from hunter_client.services.response_models.components import (
     EmailCountsPerDepartmentData,
     EmailCountsPerSeniorityLevelData,
     EmailInfo,

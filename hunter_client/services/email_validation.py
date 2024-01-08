@@ -1,6 +1,7 @@
 """This module provides an email validation service that integrates with the Hunter.io API."""
 
 from hunter_client.client import HunterClient
+from hunter_client.services.response_models import EmailVerifierResponse
 from hunter_client.storage_interface import ResultsStorage
 
 
@@ -34,6 +35,7 @@ class PersistentEmailValidationService(object):
         Returns:
             bool: Whether the email address is valid or not.
         """
-        email_is_valid = self._hunter_client.email_verifier.check_if_email_is_valid(email)
-        self._results_storage.set(email, email_is_valid)
-        return email_is_valid
+        email_verifier_raw_response = self._hunter_client.email_verifier.check_if_email_is_valid(email)
+        email_verifier_response = EmailVerifierResponse.model_validate(email_verifier_raw_response)
+        self._results_storage.set(email, email_verifier_response.is_valid)
+        return email_verifier_response.is_valid

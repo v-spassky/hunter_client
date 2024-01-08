@@ -2,13 +2,13 @@
 
 from pydantic import BaseModel
 
-from hunter_client.endpoint_handlers.response_models.data import (
+from hunter_client.services.response_models.data import (
     DomainAndNameSearcherResponseData,
     DomainSearcherResponseData,
     EmailCounterResponseData,
     EmailVerifierResponseData,
 )
-from hunter_client.endpoint_handlers.response_models.meta import (
+from hunter_client.services.response_models.meta import (
     DomainAndNameSearcherResponseMetaInfo,
     DomainSearcherResponseMetaInfo,
     EmailCounterResponseMetaInfo,
@@ -35,6 +35,11 @@ class EmailVerifierResponse(BaseModel):
 
     data: EmailVerifierResponseData  # noqa: WPS110
     meta: EmailVerifierResponseMetaInfo
+
+    @property
+    def is_valid(self) -> bool:
+        """Return whether the email address is valid."""
+        return self.data.status == 'valid'
 
 
 class EmailCounterResponse(BaseModel):

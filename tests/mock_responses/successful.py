@@ -2,7 +2,7 @@ import pytest
 
 
 @pytest.fixture
-def doamin_search_successful_response() -> dict:
+def domain_search_successful_response() -> dict:
     return {
         'data': {
             'domain': 'example.com',

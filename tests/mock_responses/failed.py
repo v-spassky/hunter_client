@@ -2,7 +2,7 @@ import pytest
 
 
 @pytest.fixture
-def doamin_search_failed_response() -> dict:
+def domain_search_failed_response() -> dict:
     return {
         'data': {
             'domain': 'nonexistent.com',

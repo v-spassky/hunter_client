@@ -1,20 +1,18 @@
 """This module contains handler class implementation for the `email-finder` endpoint of the Hunter API."""
 
 from hunter_client.endpoint_handlers.base import AbstractBaseEndpointHandler
-from hunter_client.endpoint_handlers.mappers import EmailMapper
-from hunter_client.endpoint_handlers.response_models import DomainAndNameSearcherResponse
 
 
 class DomainAndNameSearcher(AbstractBaseEndpointHandler):
     """
-    Handler for the `email-finder` endpoint in the Hunter API
+    Handler for the `email-finder` endpoint in the Hunter API.
 
     Wraps this endpoint: https://hunter.io/api-documentation/v2#email-finder.
     """
 
     _endpoint_url_path = '/email-finder'
 
-    def search_email_by_domain_and_name(self, target_domain: str, first_name: str, last_name: str) -> str | None:
+    def search_email_by_domain_and_name(self, target_domain: str, first_name: str, last_name: str) -> dict:
         """
         Search for emails associated with a given domain and name.
 
@@ -24,11 +22,6 @@ class DomainAndNameSearcher(AbstractBaseEndpointHandler):
             last_name (str): The last name of the person to search for.
 
         Returns:
-            str | None: The email address found, or None if no email was found.
+            dict: Raw JSON response from the wrapped API endpoint (`.../email-finder`).
         """
-        response = self.make_request('GET', domain=target_domain, first_name=first_name, last_name=last_name)
-        response_body = DomainAndNameSearcherResponse.model_validate(response.json())
-        email = EmailMapper.from_domain_and_name_searcher_response(response_body)
-        if not email:
-            return None
-        return email.address
+        return self.make_request('GET', domain=target_domain, first_name=first_name, last_name=last_name).json()

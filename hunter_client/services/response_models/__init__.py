@@ -1,4 +1,4 @@
-from hunter_client.endpoint_handlers.response_models.models import (
+from hunter_client.services.response_models.models import (
     DomainAndNameSearcherResponse,
     DomainSearcherResponse,
     EmailCounterResponse,
