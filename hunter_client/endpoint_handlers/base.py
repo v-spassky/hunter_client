@@ -8,10 +8,13 @@ to various API endpoints and manages common tasks like error handling, session m
 
 import logging
 from abc import ABC, abstractmethod
-from typing import NotRequired, TypedDict, Unpack
+from typing import TYPE_CHECKING, NotRequired, TypedDict, Unpack
 from urllib.parse import urlencode, urljoin
 
 import requests
+
+if TYPE_CHECKING:
+    from hunter_client.client import HunterClient
 
 logger = logging.getLogger(__name__)
 
@@ -45,14 +48,14 @@ class AbstractBaseEndpointHandler(ABC):
     _hunter_api_base_url = 'https://api.hunter.io'
     _current_api_version_path = '/v2'
 
-    def __init__(self, http_session: requests.Session) -> None:
+    def __init__(self, client: 'HunterClient') -> None:
         """
         Initialize an instance of the AbstractBaseEndpointHandler.
 
         Args:
-            http_session (requests.Session): A session object used for making HTTP requests.
+            client (HunterClient): An instance of the `HunterClient` class which is used to make HTTP requests.
         """
-        self._http_session = http_session
+        self._client = client
 
     def before_request(self, method: str, url: str, **_query_params: Unpack[PossibleQueryParams]) -> None:
         """Request lifecycle hook before making an HTTP request."""
@@ -66,7 +69,7 @@ class AbstractBaseEndpointHandler(ABC):
         """Central method to make HTTP requests."""
         url = self._formatted_url(**query_params)
         self.before_request(method, url, **query_params)
-        response = self._http_session.request(method, url)
+        response = self._client.http_session.request(method, url)
         self.after_request(response)
         response.raise_for_status()
         return response

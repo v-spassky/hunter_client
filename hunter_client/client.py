@@ -37,9 +37,9 @@ class HunterClient(object):
             http_session (requests.Session | None): The HTTP session to use for making requests.
         """
         self._api_key = api_key
-        self._http_session = http_session or requests.Session()
-        self._http_session.headers.update({'X-API-KEY': self._api_key})
-        self.domain_searcher = DomainSearcher(http_session=self._http_session)
-        self.domain_and_name_searcher = DomainAndNameSearcher(http_session=self._http_session)
-        self.email_verifier = EmailVerifier(http_session=self._http_session)
-        self.email_counter = EmailCounter(http_session=self._http_session)
+        self.http_session = http_session or requests.Session()
+        self.http_session.headers.update({'X-API-KEY': self._api_key})
+        self.domain_searcher = DomainSearcher(client=self)
+        self.domain_and_name_searcher = DomainAndNameSearcher(client=self)
+        self.email_verifier = EmailVerifier(client=self)
+        self.email_counter = EmailCounter(client=self)
