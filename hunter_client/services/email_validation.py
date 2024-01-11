@@ -2,7 +2,7 @@
 
 from hunter_client.client import HunterClient
 from hunter_client.services.response_models import EmailVerifierResponse
-from hunter_client.storage_interface import ResultsStorage
+from hunter_client.storages.interface import ResultsStorage
 
 
 class PersistentEmailValidationService(object):

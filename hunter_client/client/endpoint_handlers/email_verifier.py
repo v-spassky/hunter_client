@@ -1,6 +1,6 @@
 """This module contains handler class implementation for the `email-verifier` endpoint of the Hunter API."""
 
-from hunter_client.endpoint_handlers.base import AbstractBaseEndpointHandler
+from hunter_client.client.endpoint_handlers.base import AbstractBaseEndpointHandler
 
 
 class EmailVerifier(AbstractBaseEndpointHandler):

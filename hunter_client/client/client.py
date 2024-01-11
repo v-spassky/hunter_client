@@ -8,10 +8,10 @@ status of an email address, and counting the number of emails associated with a 
 
 import requests
 
-from hunter_client.endpoint_handlers.domain_and_name_searcher import DomainAndNameSearcher
-from hunter_client.endpoint_handlers.domain_searcher import DomainSearcher
-from hunter_client.endpoint_handlers.email_counter import EmailCounter
-from hunter_client.endpoint_handlers.email_verifier import EmailVerifier
+from hunter_client.client.endpoint_handlers.domain_and_name_searcher import DomainAndNameSearcher
+from hunter_client.client.endpoint_handlers.domain_searcher import DomainSearcher
+from hunter_client.client.endpoint_handlers.email_counter import EmailCounter
+from hunter_client.client.endpoint_handlers.email_verifier import EmailVerifier
 
 
 class HunterClient(object):
