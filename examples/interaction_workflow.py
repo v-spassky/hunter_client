@@ -1,29 +1,22 @@
 """A script demonstrating the interaction workflow with the Hunter.io API bindings provided by the library."""
 
-from hunter_client.client import HunterClient
-from hunter_client.exceptions import HunterError, InvalidInputError, TooManyRequestsError
+import logging
+
+from hunter_client.services.email_validation import PersistentEmailValidationService
 from hunter_client.storages.dummy import DummyStorage
 
-hunter_client = HunterClient(api_key='qwerty12345')
-emails_storage = DummyStorage[str, list[str]]()
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
-domains_to_search = ['example.com', 'anotherdomain.com', 'nonexistent.com']
+emails_storage = DummyStorage[str, bool]()
+email_validation_service = PersistentEmailValidationService('qwerty12345', emails_storage)
+emails_to_validate = ['email1@example.com', 'email2@anotherdomain.com', 'nonexistent@email.com']
 
-for domain in domains_to_search:
-    try:
-        emails = hunter_client.search_emails_by_domain(domain)
-    except InvalidInputError:
-        print('Invalid input for domain: {0}'.format(domain))
-    except TooManyRequestsError:
-        print('Too many requests. Please try again later.')
-    except HunterError:
-        print('An unknown error occurred.')
-    else:
-        print('Emails found for {0}: {1}'.format(domain, emails))
-        emails_storage.set(domain, emails)
+for email in emails_to_validate:
+    is_valid = email_validation_service.validate_and_store_email_status(email)
 
-    stored_emails = emails_storage.get(domain)
-    if stored_emails:
-        print('Stored emails for {0}: {1}'.format(domain, stored_emails))
-    else:
-        print('No emails stored for {0}'.format(domain))
+for stored_email in emails_to_validate:
+    validity_check_result = emails_storage.get(stored_email)
+    if not validity_check_result:
+        logger.error('Somehow the email {0} was not stored in the storage system.'.format(stored_email))
+    logger.info('Email {0} is valid: {1}'.format(stored_email, is_valid))

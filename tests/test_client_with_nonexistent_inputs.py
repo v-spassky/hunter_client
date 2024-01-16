@@ -3,70 +3,61 @@ import requests_mock
 from hunter_client.client import HunterClient
 
 
-def test_search_emails_by_domain_no_result() -> None:
-    with requests_mock.Mocker() as mocker:
-        mocker.get(
-            'https://api.hunter.io/v2/domain-search?domain=nonexistent.com&api_key=not_really_an_api_key',
-            json={
-                'data': {
-                    'emails': [],
-                },
-            },
-        )
+def test_search_emails_by_domain_no_result(
+    hunter_client: HunterClient,
+    requests_mocker: requests_mock.Mocker,
+    domain_search_failed_response: dict,
+) -> None:
+    requests_mocker.get(
+        'https://api.hunter.io/v2/domain-search?domain=nonexistent.com',
+        json=domain_search_failed_response,
+    )
 
-        client = HunterClient(api_key='not_really_an_api_key')
-        emails = client.search_emails_by_domain('nonexistent.com')
+    response = hunter_client.domain_searcher.search_emails_by_domain('nonexistent.com')
 
-        assert emails == []  # noqa: WPS520
+    assert response == domain_search_failed_response
 
 
-def test_search_email_by_random_domain_and_name() -> None:
-    with requests_mock.Mocker() as mocker:
-        mocker.get(
-            'https://api.hunter.io/v2/email-finder?domain=nonexistent.com&first_name=John&last_name=Doe'
-            + '&api_key=not_really_an_api_key',
-            json={
-                'data': {
-                    'email': None,
-                },
-            },
-        )
+def test_search_email_by_random_domain_and_name(
+    hunter_client: HunterClient,
+    requests_mocker: requests_mock.Mocker,
+    domain_and_name_search_failed_response: dict,
+) -> None:
+    requests_mocker.get(
+        'https://api.hunter.io/v2/email-finder?domain=nonexistent.com&first_name=John&last_name=Doe',
+        json=domain_and_name_search_failed_response,
+    )
 
-        client = HunterClient(api_key='not_really_an_api_key')
-        email = client.search_email_by_domain_and_name('nonexistent.com', 'John', 'Doe')
+    response = hunter_client.domain_and_name_searcher.search_email_by_domain_and_name('nonexistent.com', 'John', 'Doe')
 
-        assert email is None
+    assert response == domain_and_name_search_failed_response
 
 
-def test_get_invalid_email_status() -> None:
-    with requests_mock.Mocker() as mocker:
-        mocker.get(
-            'https://api.hunter.io/v2/email-verifier?email=test@nonexistent.com&api_key=not_really_an_api_key',
-            json={
-                'data': {
-                    'status': 'accept_all',
-                },
-            },
-        )
+def test_get_invalid_email_status(
+    hunter_client: HunterClient,
+    requests_mocker: requests_mock.Mocker,
+    email_verification_failed_response: dict,
+) -> None:
+    requests_mocker.get(
+        'https://api.hunter.io/v2/email-verifier?email=invalid@example.com',
+        json=email_verification_failed_response,
+    )
 
-        client = HunterClient(api_key='not_really_an_api_key')
-        email_is_valid = client.check_if_email_is_valid('test@nonexistent.com')
+    response = hunter_client.email_verifier.check_if_email_is_valid('invalid@example.com')
 
-        assert email_is_valid is False
+    assert response == email_verification_failed_response
 
 
-def test_count_emails_of_noneistent_domain() -> None:
-    with requests_mock.Mocker() as mocker:
-        mocker.get(
-            'https://api.hunter.io/v2/email-count?email=nonexistent.com',
-            json={
-                'data': {
-                    'total': 0,
-                },
-            },
-        )
+def test_count_emails_of_a_nonexistent_domain(
+    hunter_client: HunterClient,
+    requests_mocker: requests_mock.Mocker,
+    email_count_failed_response: dict,
+) -> None:
+    requests_mocker.get(
+        'https://api.hunter.io/v2/email-count?domain=nonexistent.com',
+        json=email_count_failed_response,
+    )
 
-        client = HunterClient(api_key='not_really_an_api_key')
-        count = client.count_emails_by_domain('nonexistent.com')
+    response = hunter_client.email_counter.count_emails_by_domain('nonexistent.com')
 
-        assert count == 0
+    assert response == email_count_failed_response

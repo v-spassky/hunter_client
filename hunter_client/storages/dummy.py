@@ -16,7 +16,7 @@ Usage:
 
 from typing import Generic
 
-from hunter_client.storage_interface import Key, ResultsStorage, ValueToStore
+from hunter_client.storages.interface import Key, ResultsStorage, ValueToStore
 
 
 class DummyStorage(ResultsStorage, Generic[Key, ValueToStore]):

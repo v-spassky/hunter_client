@@ -54,7 +54,6 @@ class ResultsStorage(ABC, Generic[Key, ValueToStore]):
         Returns:
             ValueToStore | None: The value associated with the key, or None if the key does not exist.
         """
-        pass  # noqa: WPS420
 
     @abstractmethod
     def set(self, key: Key, value_to_store: ValueToStore) -> None:
@@ -65,7 +64,6 @@ class ResultsStorage(ABC, Generic[Key, ValueToStore]):
             key (Key): The key for which to set the value.
             value_to_store (ValueToStore): The value to store.
         """
-        pass  # noqa: WPS420
 
     @abstractmethod
     def delete(self, key: Key) -> None:
@@ -75,4 +73,3 @@ class ResultsStorage(ABC, Generic[Key, ValueToStore]):
         Args:
             key (Key): The key for which to remove the value.
         """
-        pass  # noqa: WPS420
